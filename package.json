@@ -1,0 +1,15 @@
+{
+  "name": "bayislandsgoblue",
+  "version": "1.0.0",
+  "scripts": {
+    "start:client": "cd client && npm run-script start",
+    "start:server": "cd server && npm run-script start",
+    "start": "npm-run-all -p start:client start:server"
+  },
+  "author": "Matthew Keil",
+  "license": "ISC",
+  "devDependencies": {
+    "npm-run-all": "^4.1.2"
+  },
+  "dependencies": {}
+}

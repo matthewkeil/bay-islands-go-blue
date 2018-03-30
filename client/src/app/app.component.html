@@ -1,0 +1,27 @@
+<app-toolbar (homeClicked)="goHome()" (menuClicked)="sidenav.toggle()"></app-toolbar>
+<mat-sidenav-container>
+  <mat-sidenav
+    #sidenav
+    position="end"
+    mode="over"
+    fxLayout="column"
+    fxLayoutAlign="start center">
+    <mat-nav-list>
+      <a *ngFor="let link of navLinks"
+         mat-list-item
+         routerLink="{{link.url}}"
+         (click)="sidenav.close()">
+        <div fxLayout="row" fxLayoutAlign="start center">
+          <mat-icon matListIcon>{{link.icon}}</mat-icon>
+          <h4>{{link.name}}</h4>
+          <span fxFlexFill></span>
+        </div>
+      </a>
+      <div fxFlexFill></div>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+

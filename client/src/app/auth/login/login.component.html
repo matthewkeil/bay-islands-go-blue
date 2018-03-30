@@ -1,0 +1,19 @@
+<div class="container" fxLayoutAlign="center center">
+  <mat-card (keydown.enter)="submit()" (keydown.escape)="cancel()" fxFlex>
+    <mat-card-title>Login</mat-card-title>
+    <form [formGroup]="loginForm">
+      <mat-form-field>
+        <input matInput formControlName="email" type="email" placeholder="email">
+      </mat-form-field>
+      <br>
+      <mat-form-field>
+        <input matInput formControlName="password" type="password" placeholder="password">
+      </mat-form-field>
+    </form>
+    <mat-card-actions fxLayout="row" fxLayoutAlign="start center">
+      <div class="button-spacer"></div>
+      <button mat-button (click)="cancel()">Cancel</button>
+      <button mat-raised-button (click)="submit()">Submit</button>
+    </mat-card-actions>
+  </mat-card>
+</div>
