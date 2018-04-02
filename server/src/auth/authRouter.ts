@@ -1,11 +1,19 @@
 import * as express from 'express';
-
 import {
     User,
     Users
-} from '../models';
+}                   from '../models';
 
-import {ValidEmail, ValidPassword} from './';
+import {
+    ValidEmail,
+    ValidPassword
+} from './';
+
+
+
+export type AuthToken = string;
+
+
 import uuid = require('uuid');
 
 
@@ -14,22 +22,26 @@ const authRouter = express.Router();
 
 authRouter.post('/auth/login', async (req, res, next) => {
     try {
-        let email: string;
+        let user;
 
-        if (req.body && req.body.email && ValidEmail.test(req.body.email))
-            email = req.body.email;
-        else res.status(400).send({error: {message: 'Invalid email address'}});
+        if (req.body && req.body.email && ValidEmail.test(req.body.email)) {
+            user = await User.find.by.email(req.body.email);
+        } else return res.status(400).send({error: {message: 'Invalid email address'}});
 
-        const user = await User.find.by.email(email);
 
-        if (!(user && User.password.verify(req.body.password || '', user.password)))
-            res.status(401).send({error: {message: 'Invalid email or password'}});
+        if (!user || (user && !User.password.verify(req.body.password || '', user.password))) {
+            return res.status(401).send({error: {message: 'Invalid email or password'}});
+        }
 
         const token = await User.jwt.encode({email: user.email, id: user.id});
 
-        await User.update(user.id, {token});
+        await User.update(user.id, {$set: {token}});
 
-        res.status(201).send({token: user.token});
+        delete user.password;
+        delete user._id;
+
+        return res.status(201).send(<User>user);
+
     } catch (err) {
         next(err);
     }
@@ -40,15 +52,22 @@ authRouter.post('/auth/register', async (req, res, next) => {
         let email: string;
 
         if (req.body && req.body.email && ValidEmail.test(req.body.email)) email = req.body.email;
-        else res.status(400).send({error: {message: 'Invalid email address'}});
+        else return res.status(400).send({error: {message: 'Invalid email address'}});
 
         const existingUsers = await User.find.duplicate.email(email);
 
-        if (existingUsers && (existingUsers.length > 0)) existingUsers.length === 1
-            ? res.status(401).send({error: {message: 'Email account in use'}})
-            : next(new Error('Multiple accounts exist with one email address'));
+        console.log(existingUsers);
 
-        // if (!ValidPassword.test(req.body.password)) res.status(400).send({error: {message: 'Invalid password'}});
+        if (existingUsers) switch (existingUsers.length) {
+            case 0:
+                break;
+            case 1:
+                return res.status(401).send({error: {message: 'Email account in use'}});
+            default:
+                return next(new Error('Multiple accounts exist with one email address'));
+        }
+
+        // if (!ValidPassword.test(req.body.password)) return res.status(400).send({error: {message: 'Invalid password'}});
 
         const id = uuid.v1();
 
@@ -61,8 +80,11 @@ authRouter.post('/auth/register', async (req, res, next) => {
 
         const result = await Users().insertOne(user);
 
-        if (result.result.ok === 1) res.status(201).send({token: user.token});
-        else next(new Error('Unknown error creating new user'));
+        delete user.password;
+
+        if (result.result.ok === 1) return res.status(201).send(<User>user);
+        else return next(new Error('Unknown error creating new user'));
+
     } catch (err) {
         next(err);
     }

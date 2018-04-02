@@ -1,16 +1,16 @@
 import {NgModule} from '@angular/core';
-import {
-  LoginComponent,
-  RegisterComponent
-}                 from '@app/auth';
-
-import {CoreModule}    from '@app/core';
-import {HomeComponent} from '@app/home';
-import {SharedModule}  from '@app/shared';
-
-import {services} from '@core/services';
 
 import {AppComponent} from './app.component';
+
+import {LoginComponent}    from './auth/login/login.component';
+import {RegisterComponent} from './auth/register/register.component';
+
+import {
+  CoreModule,
+  services
+}                      from './core';
+import {HomeComponent} from './home';
+import {SharedModule}  from './shared';
 
 
 

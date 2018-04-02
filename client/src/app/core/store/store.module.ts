@@ -1,16 +1,19 @@
 
 
-import {NgModule}    from '@angular/core';
-import {StoreModule} from '@ngrx/store';
+import {NgModule}      from '@angular/core';
+import {EffectsModule} from '@ngrx/effects';
+import {StoreModule}   from '@ngrx/store';
 
 import {reducers}    from './reducers';
+import {effects}       from './effects';
 
 
 @NgModule({
   imports: [
-    StoreModule.forRoot(reducers)
+    StoreModule.forRoot(reducers),
+    EffectsModule.forRoot(effects)
   ],
-  exports: [StoreModule],
+  exports: [StoreModule]
 })
 export class StorageModule {
 }

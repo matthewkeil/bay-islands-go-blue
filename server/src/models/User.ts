@@ -4,10 +4,7 @@ import {
     SignOptions,
     VerifyOptions
 }                  from 'jsonwebtoken';
-import {
-    isArray,
-    promisify
-}                  from 'util';
+import * as util   from 'util';
 import {db}        from '../index';
 
 
@@ -22,25 +19,25 @@ export type TokenPayload = {
 const JWT_SECRET = process.env.JWT_SECRET || 'shhh...itsasecret';
 
 
-export const Users = () => db.collection('users');
+export const Users = () => db.collection(User.collectionName);
 
 export class User {
 
+    static collectionName = 'users';
+
     static find = {
         by       : {
-            id   : (id: string): Promise<User.I> => Users().findOne({id}),
-            email: (email: string | string []): Promise<User.I> => Users().findOne(!isArray(email)
-                ? {email}
-                : {email: {$in: email}})
+            id   : (id: string): Promise<IUser> => Users().findOne({id}),
+            email: (email: string): Promise<IUser> => Users().findOne({email})
         },
         duplicate: {
-            email: (email: string | string[]) => <Promise<User.I[]>>Users().find(!isArray(email)
+            email: (email: string | string[]) => <Promise<IUser[]>>Users().find(!util.isArray(email)
                 ? {email}
                 : {email: {$in: email}}).toArray()
         }
     };
 
-    static update = async (id: string, update: any): Promise<User.I> => {
+    static update = async (id: string, update: any): Promise<IUser> => {
         let result = await Users().findOneAndUpdate({id}, update, {returnOriginal: false});
         if (result.ok === 1) return result.value;
         throw new Error('Unknown error updating user');
@@ -48,7 +45,9 @@ export class User {
 
     static jwt = {
         encode: (payload: TokenPayload): Promise<Token> => {
-            const ENCODE               = promisify(jwt.sign);
+            //@ts-ignore
+            const ENCODE = util.promisify(jwt.sign);
+
             const options: SignOptions = {
                 issuer   : 'BayIslandsGoBlue',
                 expiresIn: 60 * 60 * 24 * 365 // tokens expire in one year
@@ -57,7 +56,9 @@ export class User {
             return ENCODE(payload, JWT_SECRET, options);
         },
         decode: (token: Token): Promise<TokenPayload> => {
-            const DECODE                 = promisify(jwt.verify);
+            //@ts-ignore
+            const DECODE = util.promisify(jwt.verify);
+
             const options: VerifyOptions = {
                 issuer: 'BayIslandsGoBlue'
             };
@@ -75,14 +76,5 @@ export class User {
         }
     };
 }
-
-export namespace User {
-    export type I = IUser;
-    export interface IUser {
-        id: string;
-        email: string;
-        password: string;
-        token: string;
-        admin?: boolean;
-    }
-}
+import {User as IUser} from '../../../common/User';
+export {IUser};

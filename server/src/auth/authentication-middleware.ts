@@ -1,7 +1,5 @@
-import {
-    TokenPayload,
-    User
-} from '../models';
+import {User}         from '../models';
+import {TokenPayload} from '../models/User';
 
 
 

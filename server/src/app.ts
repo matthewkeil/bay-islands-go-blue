@@ -11,7 +11,7 @@ import {
     authRouter
 }                        from './auth';
 import {mongoStore}      from './index';
-import {router}          from './routes/router';
+import {router}          from './router';
 
 
 
@@ -19,6 +19,7 @@ const app = express();
 
 app.use(helmet());
 app.get(/.*favicon.ico/, (req, res) => res.end());
+// noinspection Annotator
 app.use(morgan('dev'));
 app.use(cors({
     origin        : '*',

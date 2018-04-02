@@ -1,10 +1,16 @@
 
 
 import * as fromUi from './ui';
+import * as fromAuth from './auth';
 
+export type IActions = fromUi.UiActions | fromAuth.AuthActions;
 
-export type AllActions = fromUi.UiActions;
+export const action = {
+  ui: fromUi.uiActions,
+  auth: fromAuth.authActions
+};
 
-export const Actions = {
-  ui: fromUi.uiActions
+export const ACTIONS = {
+  UI: fromUi.UI_ACTIONS,
+  AUTH: fromAuth.AUTH_ACTIONS
 };

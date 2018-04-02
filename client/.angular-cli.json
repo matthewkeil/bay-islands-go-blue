@@ -54,6 +54,9 @@
     }
   },
   "defaults": {
+    "server": {
+      "port": 3000
+    },
     "styleExt": "scss",
     "component": {}
   }

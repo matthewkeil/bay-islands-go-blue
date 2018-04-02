@@ -1,8 +1,10 @@
 import {
   Component,
   EventEmitter,
-  Output
-} from '@angular/core';
+  Output,
+  Input
+}                   from '@angular/core';
+import {Observable} from 'rxjs';
 
 
 
@@ -13,7 +15,12 @@ import {
 })
 export class ToolbarComponent {
 
+  @Input() loggedIn: Observable<boolean>;
+
   @Output() homeClicked = new EventEmitter();
+
   @Output() menuClicked = new EventEmitter();
 
+  constructor() {
+  }
 }

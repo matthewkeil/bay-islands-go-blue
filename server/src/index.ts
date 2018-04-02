@@ -26,7 +26,8 @@ const normalizePort = (val: any) => {
     return undefined;
 };
 
-const PORT = normalizePort(process.env.PORT || 3000);
+
+const PORT = normalizePort(process.env.API_PORT || 3001);
 app.set('port', PORT);
 
 export let db: Db;

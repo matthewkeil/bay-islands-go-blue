@@ -7,8 +7,8 @@
   ],
   "compileOnSave": false,
   "compilerOptions": {
+    "rootDir": "../",
     "strict": true,
-    "rootDir": "src",
     "outDir": ".build",
     "sourceMap": false,
     "inlineSources": false,

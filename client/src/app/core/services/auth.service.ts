@@ -1,29 +1,71 @@
-import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {Observable} from 'rxjs/Observable';
-import {LoginData, RegistrationData, AuthToken} from '@app/auth';
+import {HttpClient} from '@angular/common/http';
+import {
+  Injectable,
+  OnDestroy,
+  OnInit
+}                   from '@angular/core';
+import {Store}      from '@ngrx/store';
+import {
+  Subscription,
+  BehaviorSubject,
+  Observable
+}                   from 'rxjs';
 
-type Method = 'post' | 'put' | 'delete';
+import {User} from '../../users';
+
+import {
+  State,
+  action
+}              from '../store';
+import {user$} from '../store/select';
+
+
+
+export interface LoginData {
+  email: string;
+
+  password: string;
+}
+
+export interface RegistrationData {
+  email: string;
+
+  password: string;
+}
+
 
 @Injectable()
-export class AuthService {
+export class AuthService implements OnInit, OnDestroy {
 
-  private url = 'http://localhost:3000/';
+  user$: BehaviorSubject<User>;
 
-  private httpOptions = {
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json'
-    })
-  };
+  private subscription: Subscription;
 
-  constructor(private http: HttpClient) {
+  private url = 'http://localhost:3001/';
+
+  constructor(private http: HttpClient,
+              private store: Store<State>) {
+    this.user$        = new BehaviorSubject<User>(undefined);
+    this.subscription = this.store.select(user$).subscribe(this.user$);
   }
 
-  login(data: LoginData) {
-    return this.http.post<AuthToken>(this.url + 'auth/login', data, this.httpOptions);
+  ngOnInit() {
+    let user = window.localStorage
+      ? <User>JSON.parse(window.localStorage.getItem('user'))
+      : undefined;
+
+    if (user) this.store.dispatch(new action.auth.LogIn(user));
   }
 
-  register(data: RegistrationData) {
-    return this.http.post<AuthToken>(this.url + 'auth/register', data, this.httpOptions);
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+
+  login(data: LoginData): Observable<User> {
+    return this.http.post<User>(this.url + 'auth/login', data);
+  }
+
+  register(data: RegistrationData): Observable<User> {
+    return this.http.post<User>(this.url + 'auth/register', data);
   }
 }

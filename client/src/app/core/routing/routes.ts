@@ -1,10 +1,8 @@
 import {Routes}                from '@angular/router';
-import {
-  LoginComponent,
-  RegisterComponent
-}                              from '@app/auth';
-import {HomeComponent}         from '@app/home';
-import {PageNotFoundComponent} from '@shared/page-not-found';
+import {LoginComponent}    from '../../auth/login/login.component';
+import {RegisterComponent} from '../../auth/register/register.component';
+import {HomeComponent}         from '../../home';
+import {PageNotFoundComponent} from '../../shared/page-not-found';
 
 
 export const routes: Routes = [

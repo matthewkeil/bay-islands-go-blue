@@ -1,3 +1,3 @@
-export * from './store.module';
-export {Actions} from './actions';
-export {State} from './state';
+export *        from './store.module';
+export {action, ACTIONS} from './actions';
+export {State}  from './state';

@@ -8,10 +8,12 @@
   ],
   "compileOnSave": false,
   "compilerOptions": {
-    "rootDir": "src",
+    "rootDir": "../",
     "outDir": ".build",
     "sourceMap": true,
     "inlineSources": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "moduleResolution": "node",
     "module": "commonjs",
     "target": "es6",

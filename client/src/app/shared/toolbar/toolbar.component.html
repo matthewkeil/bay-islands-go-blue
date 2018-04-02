@@ -2,6 +2,7 @@
   <a (click)="homeClicked.emit()"><img src="../../../assets/images/goblue_bayislands_logo.png"></a>
   <span class="spacer"></span>
   <button mat-icon-button (click)="menuClicked.emit()">
-    <mat-icon>account_circle</mat-icon>
+    <mat-icon *ngIf="!loggedIn">menu</mat-icon>
+    <mat-icon *ngIf="loggedIn">account_circle</mat-icon>
   </button>
 </mat-toolbar>

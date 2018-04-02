@@ -4,12 +4,13 @@ import {
 }                                           from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router}                             from '@angular/router';
-import {AuthService}                        from '@core/services';
+import {AuthService}                        from '../../core/services/auth.service';
+import {
+  State,
+  action
+}                                           from '../../core/store/';
+import {Store}                              from '@ngrx/store';
 
-export interface LoginData {
-  email: string;
-  password: string;
-}
 
 @Component({
   templateUrl: './login.component.html',
@@ -21,7 +22,8 @@ export class LoginComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
               private auth: AuthService,
-              private router: Router) {
+              private router: Router,
+              private store: Store<State>) {
   }
 
   ngOnInit() {
@@ -37,8 +39,8 @@ export class LoginComponent implements OnInit {
 
   submit() {
     this.auth.login(this.loginForm.value).subscribe(
-      token => {
-
-      });
+      user => this.store.dispatch(new action.auth.LogIn(user)),
+      err => { throw err },
+      () => this.router.navigateByUrl('/'));
   }
 }

@@ -1,13 +1,4 @@
-import {UiState} from './ui.state';
-import {UI_ACTIONS, uiActions, UiActions} from './ui.actions';
-import {uiReducers} from './ui.reducers';
-import * as select from './ui.select';
-
-export {
-  UiState,
-  UiActions,
-  UI_ACTIONS,
-  uiActions,
-  uiReducers,
-  select
-};
+export {UiState, uiSelectors, defaultUiState} from './ui.state';
+export {UI_ACTIONS, uiActions, UiActions} from './ui.actions';
+export {uiReducers} from './ui.reducers';
+export {UiEffects} from './ui.effects';
