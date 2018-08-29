@@ -3,12 +3,15 @@
     <mat-card-title>Register</mat-card-title>
     <form [formGroup]="registrationForm">
       <mat-form-field>
-        <input matInput formControlName="email" type="email" placeholder="email">
+        <input matInput formControlName="email" type="text" placeholder="email" app-autofocus>
       </mat-form-field>
       <br>
       <mat-form-field>
         <input matInput formControlName="password" type="password" placeholder="password">
       </mat-form-field>
+      <ng-template *ngFor="let address of b addresses">
+      <form-address [addressForm]=""></form-address>
+      </ng-template>
     </form>
     <mat-card-actions fxLayout="row" fxLayoutAlign="start center">
       <div class="button-spacer"></div>

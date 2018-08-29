@@ -1,4 +1,13 @@
+import {
+  createFeatureSelector,
+  createSelector
+} from '@ngrx/store';
+
+
+
 export interface UiState {
+
+  routingProgress: boolean;
 
   navOpen: boolean;
 
@@ -7,10 +16,7 @@ export interface UiState {
 
 export const defaultUiState: UiState = {
   navOpen : false,
+  routingProgress: false,
   errors  : []
 };
 
-export const uiSelectors = {
-  navOpen : (state: UiState) => state.navOpen,
-  errors  : (state: UiState) => state.errors
-};

@@ -1,8 +1,7 @@
 
 export {
   AuthState,
-  defaultAuthState,
-  authSelectors
+  defaultAuthState
 } from './auth.state';
 
 export {

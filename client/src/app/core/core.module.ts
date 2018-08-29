@@ -1,37 +1,48 @@
-import {CommonModule}            from '@angular/common';
 import {HttpClientModule}        from '@angular/common/http';
-import {NgModule}                from '@angular/core';
-import {ReactiveFormsModule}     from '@angular/forms';
+import {
+  NgModule,
+  ErrorHandler
+}                                from '@angular/core';
 import {BrowserModule}           from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {SharedModule}            from '../shared/shared.module';
+import {RoutingModule}           from './routing/routing.module';
+import {
+  SERVICES,
+  INTERCEPTORS
+}                                from './services';
+import {ErrorService}            from './services/error.service';
+import {StorageModule}           from './store/storage.module';
+import {PageNotFoundComponent}   from './ui/page-not-found/page-not-found.component';
+import {ToolbarComponent}        from './ui/toolbar/toolbar.component';
 
-import {RoutingModule} from './routing/routing.module';
-import {StorageModule} from './store/store.module';
 
-// import {DiagnosticsModule} from '@app/diagnostics/diagnostics.module';
-// import {UsersModule} from '@app/users';
+export const PROVIDERS = [
+  {
+    provide : ErrorHandler,
+    useClass: ErrorService
+  },
+  SERVICES,
+  INTERCEPTORS
+];
 
-
-const CORE_IMPORTS = [
-  CommonModule,
+const CORE_MODULES = [
   BrowserModule,
   BrowserAnimationsModule,
   HttpClientModule,
-  ReactiveFormsModule,
   RoutingModule,
   StorageModule
 ];
 
 @NgModule({
   imports: [
-    ...CORE_IMPORTS
-    // lazy-loaded module declarations
-    // DiagnosticsModule,
-    // UsersModule
+    CORE_MODULES,
+    SharedModule
   ],
   exports: [
-    ...CORE_IMPORTS
+    CORE_MODULES,
+    PageNotFoundComponent,
+    ToolbarComponent
   ]
 })
-export class CoreModule {
-}
+export class CoreModule {}

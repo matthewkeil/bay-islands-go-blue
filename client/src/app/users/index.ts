@@ -1,1 +1,2 @@
-export {User} from './../../../../common/User';
+import {User} from './../../../../common/User';
+export {User};

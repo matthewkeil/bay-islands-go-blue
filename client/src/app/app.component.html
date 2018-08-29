@@ -1,4 +1,4 @@
-<app-toolbar [loggedIn]="loggedIn" (homeClicked)="goHome()" (menuClicked)="sidenav.toggle()"></app-toolbar>
+<app-toolbar [loggedIn]="(auth$ | async).loggedIn" [routingProgress]="(auth$ | async).routingProgress" (homeClicked)="goHome()" (menuClicked)="sidenav.toggle()"></app-toolbar>
 <mat-sidenav-container>
   <mat-sidenav
     #sidenav
@@ -8,7 +8,7 @@
     mode="over"
     fxLayout="column"
     fxLayoutAlign="start center">
-    <mat-nav-list *ngIf="!loggedIn">
+    <mat-nav-list *ngIf="!(auth$ | async).loggedIn">
       <a *ngFor="let link of navLinks.loggedOut"
          mat-list-item
          routerLink="{{link.url}}"
@@ -21,7 +21,7 @@
       </a>
       <div fxFlexFill></div>
     </mat-nav-list>
-    <mat-nav-list *ngIf="loggedIn">
+    <mat-nav-list *ngIf="(auth$ | async).loggedIn">
       <a *ngFor="let link of navLinks.loggedIn"
          mat-list-item
          routerLink="{{link.url}}"
@@ -34,8 +34,8 @@
       </a>
       <a mat-list-item (click)="logout()">
         <div fxLayout="row" fxLayoutAlign="start center">
-          <mat-icon matListIcon>{{link.icon}}</mat-icon>
-          <h4>{{link.name}}</h4>
+          <mat-icon matListIcon>menu</mat-icon>
+          <h4>Logout</h4>
           <span fxFlexFill></span>
         </div>
       </a>

@@ -15,6 +15,7 @@ export type AuthToken = string;
 
 
 import uuid = require('uuid');
+import shortid = require('shortid');
 
 
 
@@ -37,8 +38,8 @@ authRouter.post('/auth/login', async (req, res, next) => {
 
         await User.update(user.id, {$set: {token}});
 
-        delete user.password;
-        delete user._id;
+        if (user.password) delete user.password;
+        if (user._id) delete user._id;
 
         return res.status(201).send(<User>user);
 
@@ -67,9 +68,9 @@ authRouter.post('/auth/register', async (req, res, next) => {
                 return next(new Error('Multiple accounts exist with one email address'));
         }
 
-        // if (!ValidPassword.test(req.body.password)) return res.status(400).send({error: {message: 'Invalid password'}});
+        if (!ValidPassword.test(req.body.password)) return res.status(400).send({error: {message: 'Invalid password'}});
 
-        const id = uuid.v1();
+        const id = shortid.generate();
 
         const user = {
             id      : id,

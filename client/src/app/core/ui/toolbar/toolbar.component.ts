@@ -15,7 +15,9 @@ import {Observable} from 'rxjs';
 })
 export class ToolbarComponent {
 
-  @Input() loggedIn: Observable<boolean>;
+  @Input() loggedIn: boolean;
+
+  @Input() routingProgress: boolean;
 
   @Output() homeClicked = new EventEmitter();
 

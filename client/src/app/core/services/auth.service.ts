@@ -10,6 +10,7 @@ import {
   BehaviorSubject,
   Observable
 }                   from 'rxjs';
+import 'rxjs/add/operator/map';
 
 import {User} from '../../users';
 
@@ -41,11 +42,12 @@ export class AuthService implements OnInit, OnDestroy {
 
   private subscription: Subscription;
 
-  private url = 'http://localhost:3001/';
+  private url = 'http://localhost:3001';
 
   constructor(private http: HttpClient,
               private store: Store<State>) {
-    this.user$        = new BehaviorSubject<User>(undefined);
+
+    this.user$        = new BehaviorSubject<undefined | User>(undefined);
     this.subscription = this.store.select(user$).subscribe(this.user$);
   }
 
@@ -58,14 +60,29 @@ export class AuthService implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.user$.complete();
     this.subscription.unsubscribe();
   }
 
-  login(data: LoginData): Observable<User> {
-    return this.http.post<User>(this.url + 'auth/login', data);
+  login(data: LoginData): Observable<boolean> {
+    return this.http.post<User>(this.url + '/auth/login', data)
+      .map(user => {
+        if (user) {
+          this.store.dispatch(new action.auth.LogIn(user));
+          return true;
+        }
+        throw new Error('Unknown login error');
+      });
   }
 
-  register(data: RegistrationData): Observable<User> {
-    return this.http.post<User>(this.url + 'auth/register', data);
+  register(data: RegistrationData): Observable<boolean> {
+    return this.http.post<User>(this.url + '/auth/register', data)
+      .map(user => {
+        if (user) {
+          this.store.dispatch(new action.auth.LogIn(user));
+          return true;
+        }
+        throw new Error('Unknown login error');
+      });
   }
 }

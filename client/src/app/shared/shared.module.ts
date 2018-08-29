@@ -1,25 +1,16 @@
+import {CommonModule}          from '@angular/common';
 import {NgModule}              from '@angular/core';
-import {AutofocusDirective}    from './autofocus.directive';
-import {MaterialModule}        from './material/material.module';
-import {ToolbarComponent}      from './toolbar';
-import {PageNotFoundComponent} from './page-not-found';
+import {PageNotFoundComponent} from '../core/ui/page-not-found/page-not-found.component';
+import {ToolbarComponent}      from '../core/ui/toolbar/toolbar.component';
+import {DIRECTIVES}            from './directives';
+
 
 
 @NgModule({
-  declarations: [
-    AutofocusDirective,
-    ToolbarComponent,
-    PageNotFoundComponent
-  ],
-  imports: [
-    MaterialModule
-  ],
+  imports: [CommonModule],
   exports: [
-    AutofocusDirective,
-    MaterialModule,
-    ToolbarComponent,
-    PageNotFoundComponent
+    CommonModule,
+    ...DIRECTIVES
   ]
 })
-export class SharedModule {
-}
+export class SharedModule {}

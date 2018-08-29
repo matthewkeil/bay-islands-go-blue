@@ -1,15 +1,18 @@
 import {
   Component,
   OnInit
-}                                           from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Router}                             from '@angular/router';
-import {AuthService}                        from '../../core/services/auth.service';
+}                   from '@angular/core';
 import {
-  State,
-  action
-}                                           from '../../core/store/';
-import {Store}                              from '@ngrx/store';
+  FormGroup,
+  FormBuilder,
+  Validators
+}                   from '@angular/forms';
+import {Router}     from '@angular/router';
+import {Observable} from 'rxjs';
+import 'rxjs/add/operator/catch';
+
+import {AuthService} from '../../core/services';
+
 
 
 @Component({
@@ -22,8 +25,7 @@ export class LoginComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
               private auth: AuthService,
-              private router: Router,
-              private store: Store<State>) {
+              private router: Router) {
   }
 
   ngOnInit() {
@@ -38,9 +40,11 @@ export class LoginComponent implements OnInit {
   }
 
   submit() {
-    this.auth.login(this.loginForm.value).subscribe(
-      user => this.store.dispatch(new action.auth.LogIn(user)),
-      err => { throw err },
-      () => this.router.navigateByUrl('/'));
+    this.auth.login(this.loginForm.value)
+      .catch(err => {
+        this.router.navigateByUrl('/auth/login');
+        return Observable.throw(err);
+      })
+      .subscribe(() => this.router.navigateByUrl('/'))
   }
 }

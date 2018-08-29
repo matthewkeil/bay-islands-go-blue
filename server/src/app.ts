@@ -20,7 +20,7 @@ const app = express();
 app.use(helmet());
 app.get(/.*favicon.ico/, (req, res) => res.end());
 // noinspection Annotator
-app.use(morgan('dev'));
+app.use(morgan(<any>'dev'));
 app.use(cors({
     origin        : '*',
     exposedHeaders: ['Link']

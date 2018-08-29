@@ -4,14 +4,13 @@ import {NgModule}      from '@angular/core';
 import {EffectsModule} from '@ngrx/effects';
 import {StoreModule}   from '@ngrx/store';
 
-import {reducers}    from './reducers';
-import {effects}       from './effects';
+import {reducers, effects}    from './store';
 
 
 @NgModule({
   imports: [
     StoreModule.forRoot(reducers),
-    EffectsModule.forRoot(effects)
+    // EffectsModule.forRoot(effects)
   ],
   exports: [StoreModule]
 })

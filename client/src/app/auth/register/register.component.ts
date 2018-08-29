@@ -1,8 +1,6 @@
 import {
   Component,
-  ElementRef,
-  OnInit,
-  ViewChild
+  OnInit
 }                    from '@angular/core';
 import {
   FormBuilder,
@@ -11,10 +9,12 @@ import {
 }                    from '@angular/forms';
 import {Router}      from '@angular/router';
 import {Store}       from '@ngrx/store';
-import {AuthService} from '../../core/services/auth.service';
+import {Observable}  from 'rxjs';
+import 'rxjs/add/operator/catch';
+
+import {AuthService} from '../../core/services';
 import {
-  State,
-  action
+  State
 }                    from '../../core/store';
 
 
@@ -26,7 +26,6 @@ import {
 })
 export class RegisterComponent implements OnInit {
 
-  @ViewChild('email') email;
 
   private registrationForm: FormGroup;
 
@@ -39,7 +38,8 @@ export class RegisterComponent implements OnInit {
   ngOnInit() {
     this.registrationForm = this.fb.group({
       email   : ['', Validators.required],
-      password: ['', Validators.required]
+      password: ['', Validators.required],
+      addresses: []
     });
   }
 
@@ -48,9 +48,11 @@ export class RegisterComponent implements OnInit {
   }
 
   submit() {
-    this.auth.register(this.registrationForm.value).subscribe(
-      user => this.store.dispatch(new action.auth.LogIn(user)),
-      err => { throw err },
-      () => this.router.navigateByUrl('/'));
+    return this.auth.register(this.registrationForm.value)
+      .catch(err => {
+        this.router.navigateByUrl('/auth/login');
+        return Observable.throw(err);
+      })
+      .subscribe(() => this.router.navigateByUrl('/'));
   }
 }

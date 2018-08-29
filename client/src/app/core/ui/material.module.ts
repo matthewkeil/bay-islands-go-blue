@@ -16,8 +16,10 @@ import {
   MatSelectModule,
   MatProgressSpinnerModule,
   MatSnackBarModule,
-  MatListModule
+  MatListModule,
+  MatProgressBarModule
 } from '@angular/material';
+import { FormAddressComponent } from './ui/forms/form-address/form-address.component';
 
 const materialModules = [
   FlexLayoutModule,
@@ -33,8 +35,9 @@ const materialModules = [
   MatDatepickerModule,
   MatExpansionModule,
   MatListModule,
-  // MatProgressSpinnerModule,
-  // MatSnackBarModule
+  MatProgressSpinnerModule,
+  MatProgressBarModule,
+  MatSnackBarModule
 ];
 
 
@@ -44,6 +47,7 @@ const materialModules = [
   ],
   exports: [
     ...materialModules
-  ]
+  ],
+  declarations: [FormAddressComponent]
 })
 export class MaterialModule { }
